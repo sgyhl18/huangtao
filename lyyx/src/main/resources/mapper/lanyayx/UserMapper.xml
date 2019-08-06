@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lanyayx.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ruoyi.lanyayx.domain.User">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="realName" property="realName" />
+        <result column="password" property="password" />
+        <result column="appid" property="appid" />
+        <result column="qqtoken" property="qqtoken" />
+        <result column="phone" property="phone" />
+        <result column="nickName" property="nickName" />
+        <result column="sex" property="sex" />
+        <result column="birthDay" property="birthDay" />
+        <result column="createTime" property="createTime" />
+        <result column="updateTime" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,username,real_name,password,appid,qqtoken,phone,nick_name,sex,birth_day,create_time,update_time
+
+    </sql>
+    <select id="checkUsername" resultType="int" parameterType="string" >
+    select count(1) from lanyayx_user
+    where username = #{username}
+  </select>
+    <select id="checkAPPID" resultType="int" parameterType="string" >
+    select count(1) from lanyayx_user
+    where appid = #{appid}
+  </select>
+    <select id="checkQQTOKEN" resultType="int" parameterType="string" >
+    select count(1) from lanyayx_user
+    where qqtoken = #{qqtoken}
+  </select>
+    <select id="getUserInfoByPhoneNo" resultType="int" parameterType="string" >
+    select count(1) from lanyayx_user
+    where phone = #{phone}
+  </select>
+    <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List" />
+        from lanyayx_user
+        where
+        <if test="type==1"> appid = #{username} </if>
+        <if test="type==2"> qqtoken = #{username} </if>
+        <if test="type==3">  phone = #{username} </if>
+
+    </select>
+    <select id="selectwxLogin" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List" />
+        from lanyayx_user
+        where appid = #{username}
+        and password = #{password}
+    </select>
+    <select id="selectqqLogin" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List" />
+        from lanyayx_user
+        where qqtoken = #{username}
+        and password = #{password}
+    </select>
+    <select id="selectphoneLogin" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List" />
+        from lanyayx_user
+        where phone = #{username}
+        and password = #{password}
+    </select>
+</mapper>
